@@ -14,62 +14,137 @@
     
     <script type="text/processing">
     
-      Ball[] ball;
+      PImage bg,bg2,doge,bottom,top,start;
+      float g,Vky,bgx,kx,dy;
+      int[] pipeX,pipeY; //declare 2 arrays
+      int gameState,score,hscore;
+      /*import processing.sound.*;
+      SoundFile file;
+      String audioName = "abcde.mp3";
+      String path;
+      */
 
+      //one time
       void setup(){
-        size(700, 600);
-        frameRate(100);
-        ball = new Ball[100];
-        for(int i = 0; i < ball.length; i++){
-            ball[i] = new Ball();
+        size(750,620);
+        gameState=-1;
+        bg=loadImage("./img/bg.png");
+        bg2=loadImage("./img/bg2.png");
+        doge = loadImage("./img/doge.png");
+        bottom=loadImage("./img/bottom.png");
+        top=loadImage("./img/top.png");
+        start=loadImage("./img/start.png");
+        kx=100;
+        dy=50;
+        g=0.7; //gravity ==speed of downward acceleration
+        pipeX = new int[3]; //[0,0,0,0,0]
+        pipeY = new int[pipeX.length];
+        //populate the array with values
+        for(int i=0; i<pipeX.length; i++){
+          pipeX[i] =width + 300*i;
+          pipeY[i]=(int)random(-235,0);
+        }
+        /*path = sketchPath(audioName);
+        file = new SoundFile(this, path);
+        file.amp(0.2);
+        file.play();*/
+
+      }
+
+      //Main Game Loop
+      void draw(){
+        startScreen();
+        if(gameState==0){  
+          setBg();
+          setPipes();
+          doge();
+          score();   
+        }else if(gameState==69){
+          textSize(30);
+          text("YOU LOSE",20,100);
+          textSize(20);
+          text("ow",kx,dy+40);
+          text("CLCKICK ANYWHER TO REGAME",width/2,height/2);
+          if(mousePressed){
+            score=0;
+            bgx=0;
+            dy=50;
+            setPipes();
+            gameState=0;
+            pipeX = new int[3]; //[0,0,0,0,0]
+            pipeY = new int[pipeX.length];
+            //populate the array with values
+            for(int i=0; i<pipeX.length; i++){
+              pipeX[i] =width + 300*i;
+              pipeY[i]=(int)random(-235,0);
+            }
+          }
         }
       }
 
-
-
-      void draw(){
-          background(155,0,0);
-            for(int i = 0; i < ball.length; i++){
-                ball[i].display();
-            }
-
+      void score(){
+        fill(255,0,0);
+        textSize(32);
+        text("Score: " +score,width-170,40);
+        text("Highscore: "+hscore,width-210,80);
       }
-      class Ball{
 
-          float x;
-          float y;
-          float Vx;
-          float Vy;
-          float r,g,b,o;
-          float d;
-
-          Ball(){
-              x = random(width);
-              y = random(height);
-              Vx = random(-5,5);
-              Vy = random(-5,5);
-              r = random(255);
-              g = random(255);
-              b = random(255);
-              o = random(255);
-              d = random(30) + 15;
+      void setPipes(){
+        for(int i=0; i<pipeX.length; i++){
+          image(top,pipeX[i],pipeY[i]);
+          image(bottom,pipeX[i],pipeY[i]+580);
+          if(score<10){
+            pipeX[i]-=5;
+          }else{
+            pipeX[i]-=10;
           }
-
-          void display(){
-              fill(r,g,b,o);
-              ellipse(x,y,d,d);
-              x += Vx;
-              y += Vy;
-              if(x > width || x < 0){
-                  Vx *= -1;
-              }
-              if(y > height || y < 0){
-                  Vy *= -1;
-              }
+          if(pipeX[i]<-200){
+            pipeX[i]=width;
+            pipeY[i]=(int)random(-200,0);
           }
-    }
+          if(kx>(pipeX[i]-60) && kx <pipeX[i]+57){
+            if(!(dy>pipeY[i] + 300 && dy <pipeY[i]+250+330-62)){
+              gameState=69;
+            }else if(kx==pipeX[i]){
+              score++;
+              if(score>=hscore){
+                hscore=score;
+              }
+            }
+          }
+        }  
+      }
 
 
+
+
+      void doge(){
+        image(doge,kx,dy);
+        dy=dy+Vky;
+        Vky=Vky+g;
+      }
+
+      void mousePressed(){
+        Vky=-9;
+      }
+
+      void setBg(){
+        image(bg,bgx,0); 
+        image(bg,bgx+bg.width,0);
+        bgx=bgx-1;
+        if(bgx<-bg.width){ //resets image when first image is done
+          bgx=0;
+        }
+      }
+
+      void startScreen(){
+        if(gameState==-1){
+          image(start,-45,0);
+          if(mousePressed){
+          gameState=0;
+          }
+        }
+      }
     </script>
     <canvas id="sketch" style="border: 1px solid black;"></canvas>
     
