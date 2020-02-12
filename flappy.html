@@ -9,9 +9,7 @@
   </head>
   
   <body>
-    <h1>Granada High Tutorial</h1>
-    <p>Processing demo</p>
-    
+
     <script type="text/processing">
     
       PImage bg,bg2,doge,bottom,top,start;
@@ -28,12 +26,12 @@
       void setup(){
         size(750,620);
         gameState=-1;
-        bg=loadImage("bg.png");
-        bg2=loadImage("bg2.png");
-        doge = loadImage("doge.png");
-        bottom=loadImage("bottom.png");
-        top=loadImage("top.png");
-        start=loadImage("start.png");
+        bg=loadImage("./img/bg.png");
+        bg2=loadImage("./img/bg2.png");
+        doge = loadImage("./img/doge.png");
+        bottom=loadImage("./img/bottom.png");
+        top=loadImage("./img/top.png");
+        start=loadImage("./img/start.png");
         kx=100;
         dy=50;
         g=0.7; //gravity ==speed of downward acceleration
