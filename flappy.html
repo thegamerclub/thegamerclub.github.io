@@ -55,8 +55,8 @@
         if(gameState==0){  
           setBg();
           setPipes();
-          doge();
-          score();   
+          setDoge();
+          setScore();   
         }else if(gameState==69){
           textSize(30);
           text("YOU LOSE",20,100);
@@ -80,7 +80,7 @@
         }
       }
 
-      void score(){
+      void setScore(){
         fill(255,0,0);
         textSize(32);
         text("Score: " +score,width-170,40);
@@ -116,7 +116,7 @@
 
 
 
-      void doge(){
+      void setDoge(){
         image(doge,kx,dy);
         dy=dy+Vky;
         Vky=Vky+g;
